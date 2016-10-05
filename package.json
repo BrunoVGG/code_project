@@ -1,0 +1,19 @@
+{
+  "name": "VUE",
+  "version": "1.0.0",
+  "keywords": [
+    "util",
+    "functional",
+    "server",
+    "client",
+    "browser"
+  ],
+  "author": "bveig",
+  "contributors": [],
+  "dependencies": {
+    "vue": "^1.0.26"
+  },
+  "devDependencies": {
+    "lite-server": "^2.2.2"
+  }
+}

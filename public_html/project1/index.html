@@ -1,0 +1,125 @@
+<html>
+    <head>
+        <title>CONTAS A PAGAR</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" type="text/css" href="checkbox.css">
+    </head>
+    <body>
+        <div v-if="showForm" class="box"> <!-- can be v-else -->
+            <form @submit.prevent="submit">
+                <div class="box-header">
+                    <strong> {{ action_title }} </strong>
+                    Contas a Pagar
+                    <a href="#" @click.prevent="closeForm" class="right">X</a>
+                </div>    
+                <div class="box-body">
+                    <div>
+                        <label>Data</label>
+                        <input v-model="bill.due_date" type="date" placeholder="00/00/0000">
+                    </div><br>
+                    <div>
+                        <label>Name</label>
+                        <select v-model="bill.name">
+                            <!--
+                                v-for="(o,name) in names" = v-for="name in names"
+                                :value="name" = v-bind:value="name"
+                            ... -->
+                            <option v-for="(o,name) in names" :value="name">{{ name }}</option>
+                        </select>
+                    </div><br>
+                    <div>
+                        <label>Valor</label>
+                        <input v-model="bill.value" type="text" placeholder="00,00">
+                    </div><BR>
+                    <div style="text-align: left">
+                        <label>Pago</label>
+                        <div style="width: 50px; color: greenyellow">
+                            <!-- Rounded ONE -->
+                            <div class="roundedOne">
+                                    <input type="checkbox" v-model="bill.done" id="roundedOne" name="check" />
+                                    <label for="roundedOne"></label>
+                            </div>
+                        </div>    
+
+                    </div><BR>                    
+                </div>
+                <div class="box-footer">
+                    <button @click.prevent="closeForm"> Cancelar </button>
+                    <button type="submit"> Enviar </button>
+                </div>
+            </form>
+        </div>         
+        <div id="box-quest" v-if="showQuestRemove" class="box">    
+            <div class="box-header">
+                Deseja excluir o registro?
+            </div>    
+            <div class="box-footer">
+                <button @click.prevent="questRemoveClose">Não</button>
+                <button @click.prevent="questRemoveConfirm">Sim</button>
+            </div>
+
+        </div>    
+        <div> 
+            <nav>
+                <ul>
+                    <li v-for="item in menu">
+                        <a href="#" @click.prevent="showView($event,item.id)" >
+                            {{ item.name }}
+                        </a>
+                    </li>
+                </ul>
+            </nav>  
+
+            <div class="conteiner">  
+                <h1>
+                    {{ title }} 
+                </h1>
+                <div>
+                    <hr>
+                    <h4 v-if='bills.length' :class="{'success':totalOpen==0, 'danger':totalOpen>0 }" >
+                        {{ totalOpen | totalOpenLabel }} <br>
+                    </h4>
+
+                    <div v-if='!bills.length' :class="{'warning-empty':!bills.length}">
+                        {{ bills.length | totalBills }}
+                    </div>    
+                    <table v-if='bills.length' class='table'>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Date</th>
+                                <th>Name</th>
+                                <th>Value</th>
+                                <th>Paga</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>    
+                        <tbody>
+                            <tr v-for="(i,item) in bills">
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.due_date}}</td>
+                                <td>{{ item.name}}</td>
+                                <td>{{ item.value | currency 'R$' 2 }}</td>
+                                <td :class="{'paid':item.done, 'not-paid':!item.done}">
+                                    {{ item.done | doneLabel }}</td>
+                                <td class="acitons">
+                                    <a href="#" @click.prevent="loadBill(item)">
+                                        Edit
+                                    </a> 
+                                    <a href="#" @click.prevent="questRemoveShow(item)">
+                                        Remove 
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>    
+                    </table>         
+                </div>
+            </div>    
+        </div>      
+        <script type="text/javascript" src="../../node_modules/vue/dist/vue.js"></script>
+        <script type="text/javascript" src="aula1.js"></script> 
+
+    </body>
+</html>
